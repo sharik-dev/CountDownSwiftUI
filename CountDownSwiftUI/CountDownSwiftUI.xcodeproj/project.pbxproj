@@ -1,0 +1,748 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		98A8E18E2D91E8A5003E3EEF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A8E18D2D91E8A5003E3EEF /* WidgetKit.framework */; };
+		98A8E1902D91E8A5003E3EEF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A8E18F2D91E8A5003E3EEF /* SwiftUI.framework */; };
+		98A8E1A12D91E8A8003E3EEF /* SleepCountdownWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 98A8E18B2D91E8A5003E3EEF /* SleepCountdownWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		989313C62D7F3F3B00BC6A28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 989313A82D7F3F3900BC6A28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 989313AF2D7F3F3900BC6A28;
+			remoteInfo = CountDownSwiftUI;
+		};
+		989313D02D7F3F3B00BC6A28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 989313A82D7F3F3900BC6A28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 989313AF2D7F3F3900BC6A28;
+			remoteInfo = CountDownSwiftUI;
+		};
+		98A8E19F2D91E8A8003E3EEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 989313A82D7F3F3900BC6A28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 98A8E18A2D91E8A5003E3EEF;
+			remoteInfo = SleepCountdownWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		98A8E1A62D91E8A8003E3EEF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				98A8E1A12D91E8A8003E3EEF /* SleepCountdownWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		989313B02D7F3F3900BC6A28 /* CountDownSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountDownSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		989313C52D7F3F3B00BC6A28 /* CountDownSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountDownSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		989313CF2D7F3F3B00BC6A28 /* CountDownSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountDownSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		98A8E18B2D91E8A5003E3EEF /* SleepCountdownWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SleepCountdownWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		98A8E18D2D91E8A5003E3EEF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		98A8E18F2D91E8A5003E3EEF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		98A8E1A82D91E950003E3EEF /* SleepCountdownWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SleepCountdownWidgetExtension.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		98A8E1A22D91E8A8003E3EEF /* Exceptions for "SleepCountdownWidget" folder in "SleepCountdownWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 98A8E18A2D91E8A5003E3EEF /* SleepCountdownWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		989313B22D7F3F3900BC6A28 /* CountDownSwiftUI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CountDownSwiftUI;
+			sourceTree = "<group>";
+		};
+		989313C82D7F3F3B00BC6A28 /* CountDownSwiftUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CountDownSwiftUITests;
+			sourceTree = "<group>";
+		};
+		989313D22D7F3F3B00BC6A28 /* CountDownSwiftUIUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CountDownSwiftUIUITests;
+			sourceTree = "<group>";
+		};
+		98A8E1912D91E8A5003E3EEF /* SleepCountdownWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				98A8E1A22D91E8A8003E3EEF /* Exceptions for "SleepCountdownWidget" folder in "SleepCountdownWidgetExtension" target */,
+			);
+			path = SleepCountdownWidget;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		989313AD2D7F3F3900BC6A28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989313C22D7F3F3B00BC6A28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989313CC2D7F3F3B00BC6A28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98A8E1882D91E8A5003E3EEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98A8E1902D91E8A5003E3EEF /* SwiftUI.framework in Frameworks */,
+				98A8E18E2D91E8A5003E3EEF /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		989313A72D7F3F3900BC6A28 = {
+			isa = PBXGroup;
+			children = (
+				98A8E1A82D91E950003E3EEF /* SleepCountdownWidgetExtension.entitlements */,
+				989313B22D7F3F3900BC6A28 /* CountDownSwiftUI */,
+				989313C82D7F3F3B00BC6A28 /* CountDownSwiftUITests */,
+				989313D22D7F3F3B00BC6A28 /* CountDownSwiftUIUITests */,
+				98A8E1912D91E8A5003E3EEF /* SleepCountdownWidget */,
+				98A8E18C2D91E8A5003E3EEF /* Frameworks */,
+				989313B12D7F3F3900BC6A28 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		989313B12D7F3F3900BC6A28 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				989313B02D7F3F3900BC6A28 /* CountDownSwiftUI.app */,
+				989313C52D7F3F3B00BC6A28 /* CountDownSwiftUITests.xctest */,
+				989313CF2D7F3F3B00BC6A28 /* CountDownSwiftUIUITests.xctest */,
+				98A8E18B2D91E8A5003E3EEF /* SleepCountdownWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		98A8E18C2D91E8A5003E3EEF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98A8E18D2D91E8A5003E3EEF /* WidgetKit.framework */,
+				98A8E18F2D91E8A5003E3EEF /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		989313AF2D7F3F3900BC6A28 /* CountDownSwiftUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 989313D92D7F3F3B00BC6A28 /* Build configuration list for PBXNativeTarget "CountDownSwiftUI" */;
+			buildPhases = (
+				989313AC2D7F3F3900BC6A28 /* Sources */,
+				989313AD2D7F3F3900BC6A28 /* Frameworks */,
+				989313AE2D7F3F3900BC6A28 /* Resources */,
+				98A8E1A62D91E8A8003E3EEF /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				98A8E1A02D91E8A8003E3EEF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				989313B22D7F3F3900BC6A28 /* CountDownSwiftUI */,
+			);
+			name = CountDownSwiftUI;
+			packageProductDependencies = (
+			);
+			productName = CountDownSwiftUI;
+			productReference = 989313B02D7F3F3900BC6A28 /* CountDownSwiftUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		989313C42D7F3F3B00BC6A28 /* CountDownSwiftUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 989313DC2D7F3F3B00BC6A28 /* Build configuration list for PBXNativeTarget "CountDownSwiftUITests" */;
+			buildPhases = (
+				989313C12D7F3F3B00BC6A28 /* Sources */,
+				989313C22D7F3F3B00BC6A28 /* Frameworks */,
+				989313C32D7F3F3B00BC6A28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				989313C72D7F3F3B00BC6A28 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				989313C82D7F3F3B00BC6A28 /* CountDownSwiftUITests */,
+			);
+			name = CountDownSwiftUITests;
+			packageProductDependencies = (
+			);
+			productName = CountDownSwiftUITests;
+			productReference = 989313C52D7F3F3B00BC6A28 /* CountDownSwiftUITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		989313CE2D7F3F3B00BC6A28 /* CountDownSwiftUIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 989313DF2D7F3F3B00BC6A28 /* Build configuration list for PBXNativeTarget "CountDownSwiftUIUITests" */;
+			buildPhases = (
+				989313CB2D7F3F3B00BC6A28 /* Sources */,
+				989313CC2D7F3F3B00BC6A28 /* Frameworks */,
+				989313CD2D7F3F3B00BC6A28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				989313D12D7F3F3B00BC6A28 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				989313D22D7F3F3B00BC6A28 /* CountDownSwiftUIUITests */,
+			);
+			name = CountDownSwiftUIUITests;
+			packageProductDependencies = (
+			);
+			productName = CountDownSwiftUIUITests;
+			productReference = 989313CF2D7F3F3B00BC6A28 /* CountDownSwiftUIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		98A8E18A2D91E8A5003E3EEF /* SleepCountdownWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98A8E1A32D91E8A8003E3EEF /* Build configuration list for PBXNativeTarget "SleepCountdownWidgetExtension" */;
+			buildPhases = (
+				98A8E1872D91E8A5003E3EEF /* Sources */,
+				98A8E1882D91E8A5003E3EEF /* Frameworks */,
+				98A8E1892D91E8A5003E3EEF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				98A8E1912D91E8A5003E3EEF /* SleepCountdownWidget */,
+			);
+			name = SleepCountdownWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = SleepCountdownWidgetExtension;
+			productReference = 98A8E18B2D91E8A5003E3EEF /* SleepCountdownWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		989313A82D7F3F3900BC6A28 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					989313AF2D7F3F3900BC6A28 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					989313C42D7F3F3B00BC6A28 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 989313AF2D7F3F3900BC6A28;
+					};
+					989313CE2D7F3F3B00BC6A28 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 989313AF2D7F3F3900BC6A28;
+					};
+					98A8E18A2D91E8A5003E3EEF = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = 989313AB2D7F3F3900BC6A28 /* Build configuration list for PBXProject "CountDownSwiftUI" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 989313A72D7F3F3900BC6A28;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 989313B12D7F3F3900BC6A28 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				989313AF2D7F3F3900BC6A28 /* CountDownSwiftUI */,
+				989313C42D7F3F3B00BC6A28 /* CountDownSwiftUITests */,
+				989313CE2D7F3F3B00BC6A28 /* CountDownSwiftUIUITests */,
+				98A8E18A2D91E8A5003E3EEF /* SleepCountdownWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		989313AE2D7F3F3900BC6A28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989313C32D7F3F3B00BC6A28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989313CD2D7F3F3B00BC6A28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98A8E1892D91E8A5003E3EEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		989313AC2D7F3F3900BC6A28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989313C12D7F3F3B00BC6A28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989313CB2D7F3F3B00BC6A28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98A8E1872D91E8A5003E3EEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		989313C72D7F3F3B00BC6A28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 989313AF2D7F3F3900BC6A28 /* CountDownSwiftUI */;
+			targetProxy = 989313C62D7F3F3B00BC6A28 /* PBXContainerItemProxy */;
+		};
+		989313D12D7F3F3B00BC6A28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 989313AF2D7F3F3900BC6A28 /* CountDownSwiftUI */;
+			targetProxy = 989313D02D7F3F3B00BC6A28 /* PBXContainerItemProxy */;
+		};
+		98A8E1A02D91E8A8003E3EEF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 98A8E18A2D91E8A5003E3EEF /* SleepCountdownWidgetExtension */;
+			targetProxy = 98A8E19F2D91E8A8003E3EEF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		989313D72D7F3F3B00BC6A28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		989313D82D7F3F3B00BC6A28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		989313DA2D7F3F3B00BC6A28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CountDownSwiftUI/CountDownSwiftUI.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CountDownSwiftUI/Preview Content\"";
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		989313DB2D7F3F3B00BC6A28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CountDownSwiftUI/CountDownSwiftUI.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CountDownSwiftUI/Preview Content\"";
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		989313DD2D7F3F3B00BC6A28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountDownSwiftUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CountDownSwiftUI";
+			};
+			name = Debug;
+		};
+		989313DE2D7F3F3B00BC6A28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountDownSwiftUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CountDownSwiftUI";
+			};
+			name = Release;
+		};
+		989313E02D7F3F3B00BC6A28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUIUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CountDownSwiftUI;
+			};
+			name = Debug;
+		};
+		989313E12D7F3F3B00BC6A28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUIUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CountDownSwiftUI;
+			};
+			name = Release;
+		};
+		98A8E1A42D91E8A8003E3EEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SleepCountdownWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SleepCountdownWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SleepCountdownWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUI.SleepCountdownWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		98A8E1A52D91E8A8003E3EEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SleepCountdownWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2XR666D9B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SleepCountdownWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SleepCountdownWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sharik.CountDownSwiftUI.SleepCountdownWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		989313AB2D7F3F3900BC6A28 /* Build configuration list for PBXProject "CountDownSwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				989313D72D7F3F3B00BC6A28 /* Debug */,
+				989313D82D7F3F3B00BC6A28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		989313D92D7F3F3B00BC6A28 /* Build configuration list for PBXNativeTarget "CountDownSwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				989313DA2D7F3F3B00BC6A28 /* Debug */,
+				989313DB2D7F3F3B00BC6A28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		989313DC2D7F3F3B00BC6A28 /* Build configuration list for PBXNativeTarget "CountDownSwiftUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				989313DD2D7F3F3B00BC6A28 /* Debug */,
+				989313DE2D7F3F3B00BC6A28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		989313DF2D7F3F3B00BC6A28 /* Build configuration list for PBXNativeTarget "CountDownSwiftUIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				989313E02D7F3F3B00BC6A28 /* Debug */,
+				989313E12D7F3F3B00BC6A28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		98A8E1A32D91E8A8003E3EEF /* Build configuration list for PBXNativeTarget "SleepCountdownWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98A8E1A42D91E8A8003E3EEF /* Debug */,
+				98A8E1A52D91E8A8003E3EEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 989313A82D7F3F3900BC6A28 /* Project object */;
+}
