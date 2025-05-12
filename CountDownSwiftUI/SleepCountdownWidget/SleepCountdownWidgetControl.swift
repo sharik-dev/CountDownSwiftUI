@@ -8,6 +8,7 @@
 import AppIntents
 import SwiftUI
 import WidgetKit
+import ActivityKit
 
 struct SleepCountdownWidgetControl: Widget {
     static let kind: String = "sharik.CountDownSwiftUI.SleepCountdownWidget"
@@ -198,4 +199,236 @@ struct SleepTimerProvider: TimelineProvider {
         statusText: "",
         timeRemaining: ""
     )
+}
+
+class SleepActivityManager: ObservableObject {
+    @Published var isActivityActive = false
+    private var activity: Activity<SleepCountdownWidgetAttributes>?
+    
+    init() {
+        // Vérifier s'il existe déjà une activité active
+        if let currentActivity = Activity<SleepCountdownWidgetAttributes>.activities.first {
+            self.activity = currentActivity
+            self.isActivityActive = true
+        }
+    }
+    
+    // Démarre l'activité lorsque appelé depuis l'application principale
+    func startActivityFromView(bedtime: Date, wakeupTime: Date) {
+        // Récupérer les paramètres personnalisables depuis UserDefaults
+        let defaults = UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")
+        let bedtimeIcon = defaults?.string(forKey: "bedtimeIcon") ?? "bed.double.fill"
+        let wakeupIcon = defaults?.string(forKey: "wakeupIcon") ?? "alarm.fill"
+        let alertIcon = defaults?.string(forKey: "alertIcon") ?? "exclamationmark.triangle.fill"
+        let bedtimeText = defaults?.string(forKey: "bedtimeText") ?? "Time until bedtime"
+        let wakeupText = defaults?.string(forKey: "wakeupText") ?? "Time until wake-up"
+        let alertText = defaults?.string(forKey: "alertText") ?? "Sleep time running out!"
+        
+        // Calculer l'heure actuelle et les paramètres
+        let now = Date()
+        let calendar = Calendar.current
+        
+        // Normaliser les heures pour aujourd'hui
+        let today = calendar.startOfDay(for: now)
+        var bedtimeToday = calendar.date(bySettingHour: calendar.component(.hour, from: bedtime),
+                                      minute: calendar.component(.minute, from: bedtime),
+                                      second: 0,
+                                      of: today)!
+        
+        var wakeupToday = calendar.date(bySettingHour: calendar.component(.hour, from: wakeupTime),
+                                     minute: calendar.component(.minute, from: wakeupTime),
+                                     second: 0,
+                                     of: today)!
+        
+        // Si l'heure est déjà passée, ajouter un jour
+        if bedtimeToday < now {
+            bedtimeToday = calendar.date(byAdding: .day, value: 1, to: bedtimeToday)!
+        }
+        
+        if wakeupToday < now {
+            wakeupToday = calendar.date(byAdding: .day, value: 1, to: wakeupToday)!
+        }
+        
+        // Calculer les différences en secondes
+        let secondsToBedtime = calendar.dateComponents([.second], from: now, to: bedtimeToday).second ?? 0
+        let secondsToWakeup = calendar.dateComponents([.second], from: now, to: wakeupToday).second ?? 0
+        
+        // Déterminer si nous montrons le compte à rebours avant le coucher ou avant le réveil
+        let isBeforeBedtime = secondsToBedtime < secondsToWakeup
+        let isSleepingPeriod = !isBeforeBedtime
+        
+        // Calculer le temps restant et la progression
+        let timeRemaining = isBeforeBedtime ? Double(secondsToBedtime) : Double(secondsToWakeup)
+        let maxTimeInSeconds = 24 * 3600.0 // 24 heures en secondes
+        let progress = 1.0 - (timeRemaining / maxTimeInSeconds)
+        
+        // Créer les attributs pour l'activité
+        let attributes = SleepCountdownWidgetAttributes(
+            name: "Sleep Timer",
+            bedtime: bedtime,
+            wakeupTime: wakeupTime,
+            startTime: now,
+            endTime: isBeforeBedtime ? bedtimeToday : wakeupToday
+        )
+        
+        // Créer l'état initial de l'activité
+        let initialState = SleepCountdownWidgetAttributes.ContentState(
+            timeRemaining: timeRemaining,
+            isBeforeBedtime: isBeforeBedtime,
+            isSleepingPeriod: isSleepingPeriod,
+            progress: progress,
+            bedtimeIcon: bedtimeIcon,
+            wakeupIcon: wakeupIcon,
+            alertIcon: alertIcon,
+            bedtimeText: bedtimeText,
+            wakeupText: wakeupText,
+            alertText: alertText
+        )
+        
+        do {
+            self.activity = try Activity.request(
+                attributes: attributes,
+                contentState: initialState,
+                pushType: nil
+            )
+            self.isActivityActive = true
+            
+            // Démarrer les mises à jour régulières
+            startUpdatingActivity()
+        } catch {
+            print("Error starting Live Activity: \(error.localizedDescription)")
+        }
+    }
+    
+    // Met à jour l'activité avec le temps restant actuel
+    private func updateActivity() {
+        guard let activity = self.activity else { return }
+        
+        // Récupérer les attributs actuels
+        let attributes = activity.attributes
+        let bedtime = attributes.bedtime
+        let wakeupTime = attributes.wakeupTime
+        
+        // Récupérer les paramètres personnalisables depuis UserDefaults
+        let defaults = UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")
+        let bedtimeIcon = defaults?.string(forKey: "bedtimeIcon") ?? "bed.double.fill"
+        let wakeupIcon = defaults?.string(forKey: "wakeupIcon") ?? "alarm.fill"
+        let alertIcon = defaults?.string(forKey: "alertIcon") ?? "exclamationmark.triangle.fill"
+        let bedtimeText = defaults?.string(forKey: "bedtimeText") ?? "Time until bedtime"
+        let wakeupText = defaults?.string(forKey: "wakeupText") ?? "Time until wake-up"
+        let alertText = defaults?.string(forKey: "alertText") ?? "Sleep time running out!"
+        
+        // Calculer l'heure actuelle et les paramètres
+        let now = Date()
+        let calendar = Calendar.current
+        
+        // Normaliser les heures pour aujourd'hui
+        let today = calendar.startOfDay(for: now)
+        var bedtimeToday = calendar.date(bySettingHour: calendar.component(.hour, from: bedtime),
+                                      minute: calendar.component(.minute, from: bedtime),
+                                      second: 0,
+                                      of: today)!
+        
+        var wakeupToday = calendar.date(bySettingHour: calendar.component(.hour, from: wakeupTime),
+                                     minute: calendar.component(.minute, from: wakeupTime),
+                                     second: 0,
+                                     of: today)!
+        
+        // Si l'heure est déjà passée, ajouter un jour
+        if bedtimeToday < now {
+            bedtimeToday = calendar.date(byAdding: .day, value: 1, to: bedtimeToday)!
+        }
+        
+        if wakeupToday < now {
+            wakeupToday = calendar.date(byAdding: .day, value: 1, to: wakeupToday)!
+        }
+        
+        // Calculer les différences en secondes
+        let secondsToBedtime = calendar.dateComponents([.second], from: now, to: bedtimeToday).second ?? 0
+        let secondsToWakeup = calendar.dateComponents([.second], from: now, to: wakeupToday).second ?? 0
+        
+        // Déterminer si nous montrons le compte à rebours avant le coucher ou avant le réveil
+        let isBeforeBedtime = secondsToBedtime < secondsToWakeup
+        let isSleepingPeriod = !isBeforeBedtime
+        
+        // Calculer le temps restant et la progression
+        let timeRemaining = isBeforeBedtime ? Double(secondsToBedtime) : Double(secondsToWakeup)
+        let maxTimeInSeconds = 24 * 3600.0 // 24 heures en secondes
+        let progress = 1.0 - (timeRemaining / maxTimeInSeconds)
+        
+        // Si le temps est écoulé, terminer l'activité
+        if timeRemaining <= 0 {
+            Task {
+                await activity.end(
+                    ActivityContent(
+                        state: activity.contentState,
+                        staleDate: nil
+                    ),
+                    dismissalPolicy: .immediate
+                )
+                DispatchQueue.main.async {
+                    self.isActivityActive = false
+                    self.activity = nil
+                }
+            }
+            return
+        }
+        
+        // Créer le nouvel état
+        let updatedState = SleepCountdownWidgetAttributes.ContentState(
+            timeRemaining: timeRemaining,
+            isBeforeBedtime: isBeforeBedtime,
+            isSleepingPeriod: isSleepingPeriod,
+            progress: progress,
+            bedtimeIcon: bedtimeIcon,
+            wakeupIcon: wakeupIcon,
+            alertIcon: alertIcon,
+            bedtimeText: bedtimeText,
+            wakeupText: wakeupText,
+            alertText: alertText
+        )
+        
+        // Mettre à jour l'activité
+        Task {
+            await activity.update(
+                ActivityContent(
+                    state: updatedState,
+                    staleDate: Calendar.current.date(byAdding: .minute, value: 30, to: Date())
+                )
+            )
+        }
+    }
+    
+    // Met à jour l'activité toutes les 10 secondes
+    private func startUpdatingActivity() {
+        guard isActivityActive else { return }
+        
+        // Mettre à jour immédiatement
+        updateActivity()
+        
+        // Puis programmer une mise à jour toutes les 10 secondes
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+            self?.startUpdatingActivity()
+        }
+    }
+    
+    // Termine l'activité
+    func endActivityFromView() {
+        guard let activity = self.activity else { return }
+        
+        Task {
+            await activity.end(
+                ActivityContent(
+                    state: activity.contentState,
+                    staleDate: nil
+                ),
+                dismissalPolicy: .immediate
+            )
+            
+            DispatchQueue.main.async {
+                self.isActivityActive = false
+                self.activity = nil
+            }
+        }
+    }
 }

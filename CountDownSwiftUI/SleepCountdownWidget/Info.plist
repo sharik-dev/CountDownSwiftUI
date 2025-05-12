@@ -6,6 +6,12 @@
 	<dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.widgetkit-extension</string>
+		<key>NSSupportsLiveActivities</key>
+		<true/>
+		<key></key>
+		<string></string>
 	</dict>
+	<key>APP_GROUP_IDENTIFIER</key>
+	<string>group.com.tempest.CountDownSwiftUI</string>
 </dict>
 </plist>

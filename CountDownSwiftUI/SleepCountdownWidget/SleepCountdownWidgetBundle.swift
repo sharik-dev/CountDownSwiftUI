@@ -12,7 +12,6 @@ import SwiftUI
 struct SleepCountdownWidgetBundle: WidgetBundle {
     var body: some Widget {
         SleepCountdownWidget()
-        SleepCountdownWidgetControl()
         SleepCountdownWidgetLiveActivity()
     }
 }

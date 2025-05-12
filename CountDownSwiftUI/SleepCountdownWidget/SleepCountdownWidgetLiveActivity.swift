@@ -9,15 +9,23 @@ import ActivityKit
 import WidgetKit
 import SwiftUI
 
+
 struct SleepCountdownWidgetAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
-        // Dynamic stateful properties about your activity go here!
         var timeRemaining: TimeInterval
         var isBeforeBedtime: Bool
+        var isSleepingPeriod: Bool
         var progress: Double
+        
+        // Ajout des textes et icônes personnalisables
+        var bedtimeIcon: String
+        var wakeupIcon: String
+        var alertIcon: String
+        var bedtimeText: String
+        var wakeupText: String
+        var alertText: String
     }
 
-    // Fixed non-changing properties about your activity go here!
     var name: String
     var bedtime: Date
     var wakeupTime: Date
@@ -31,18 +39,20 @@ struct SleepCountdownWidgetLiveActivity: Widget {
             // Lock screen/banner UI goes here
             VStack {
                 HStack {
-                    Image(systemName: context.state.isBeforeBedtime ? "bed.double.fill" : "alarm.fill")
+                    Image(systemName: context.state.isSleepingPeriod ? context.state.wakeupIcon : context.state.bedtimeIcon)
                         .foregroundStyle(.white)
                     
-                    Text(context.state.isBeforeBedtime ? "Time until bedtime" : "Time until wake-up")
+                    Text(context.state.isSleepingPeriod ? context.state.wakeupText : context.state.bedtimeText)
                         .font(.headline)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                         .foregroundStyle(.white)
                     
                     Spacer()
                     
-                    Text(formatTimeInterval(context.state.timeRemaining))
-                        .font(.system(.title2, design: .monospaced, weight: .bold))
-                        .foregroundStyle(.white)
+                    // Utilisation du texte responsif
+                    responsiveTimeText(formatTimeInterval(context.state.timeRemaining))
+                        .frame(width: 130, height: 30)
                 }
                 
                 ProgressView(value: context.state.progress)
@@ -50,7 +60,7 @@ struct SleepCountdownWidgetLiveActivity: Widget {
                     .tint(.white)
             }
             .padding()
-            .activityBackgroundTint(context.state.isBeforeBedtime ? Color.indigo : Color.blue)
+            .activityBackgroundTint(context.state.isSleepingPeriod ? Color.blue : Color.indigo)
             .activitySystemActionForegroundColor(Color.white)
 
         } dynamicIsland: { context in
@@ -59,9 +69,9 @@ struct SleepCountdownWidgetLiveActivity: Widget {
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
                     VStack(alignment: .leading) {
-                        Image(systemName: context.state.isBeforeBedtime ? "bed.double.fill" : "alarm.fill")
-                            .foregroundStyle(context.state.isBeforeBedtime ? .indigo : .blue)
-                        Text(context.state.isBeforeBedtime ? "Bedtime" : "Wake up")
+                        Image(systemName: context.state.isSleepingPeriod ? context.state.wakeupIcon : context.state.bedtimeIcon)
+                            .foregroundStyle(context.state.isSleepingPeriod ? .blue : .indigo)
+                        Text(context.state.isSleepingPeriod ? "Réveil" : "Coucher")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -70,7 +80,9 @@ struct SleepCountdownWidgetLiveActivity: Widget {
                     VStack(alignment: .trailing) {
                         Text(formatTimeInterval(context.state.timeRemaining))
                             .font(.system(.body, design: .monospaced, weight: .bold))
-                            .foregroundStyle(context.state.isBeforeBedtime ? .indigo : .blue)
+                            .minimumScaleFactor(0.7)
+                            .lineLimit(1)
+                            .foregroundStyle(context.state.isSleepingPeriod ? .blue : .indigo)
                         
                         Text(formatTargetTime(context))
                             .font(.caption2)
@@ -81,30 +93,36 @@ struct SleepCountdownWidgetLiveActivity: Widget {
                     VStack(spacing: 8) {
                         ProgressView(value: context.state.progress)
                             .progressViewStyle(.linear)
-                            .tint(context.state.isBeforeBedtime ? .indigo : .blue)
+                            .tint(context.state.isSleepingPeriod ? .blue : .indigo)
                         
                         HStack {
                             Text("Started: \(formatTime(context.attributes.startTime))")
+                                .minimumScaleFactor(0.8)
+                                .lineLimit(1)
                             Spacer()
                             Text("Ends: \(formatTime(context.attributes.endTime))")
+                                .minimumScaleFactor(0.8)
+                                .lineLimit(1)
                         }
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                     }
                 }
             } compactLeading: {
-                Image(systemName: context.state.isBeforeBedtime ? "bed.double.fill" : "alarm.fill")
-                    .foregroundStyle(context.state.isBeforeBedtime ? .indigo : .blue)
+                Image(systemName: context.state.isSleepingPeriod ? context.state.wakeupIcon : context.state.bedtimeIcon)
+                    .foregroundStyle(context.state.isSleepingPeriod ? .blue : .indigo)
             } compactTrailing: {
                 Text(formatTimeInterval(context.state.timeRemaining))
                     .font(.system(.body, design: .monospaced, weight: .bold))
-                    .foregroundStyle(context.state.isBeforeBedtime ? .indigo : .blue)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
+                    .foregroundStyle(context.state.isSleepingPeriod ? .blue : .indigo)
             } minimal: {
-                Image(systemName: context.state.isBeforeBedtime ? "bed.double.fill" : "alarm.fill")
-                    .foregroundStyle(context.state.isBeforeBedtime ? .indigo : .blue)
+                Image(systemName: context.state.isSleepingPeriod ? context.state.wakeupIcon : context.state.bedtimeIcon)
+                    .foregroundStyle(context.state.isSleepingPeriod ? .blue : .indigo)
             }
             .widgetURL(URL(string: "sleepCountdown://openApp"))
-            .keylineTint(context.state.isBeforeBedtime ? Color.indigo : Color.blue)
+            .keylineTint(context.state.isSleepingPeriod ? Color.blue : Color.indigo)
         }
     }
     
@@ -113,23 +131,32 @@ struct SleepCountdownWidgetLiveActivity: Widget {
         let minutes = (Int(interval) % 3600) / 60
         let seconds = Int(interval) % 60
         
-        if hours > 0 {
-            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            return String(format: "%02d:%02d", minutes, seconds)
-        }
+        // Toujours afficher les heures, minutes et secondes
+        return String(format: "%d:%02d:%02d", hours, minutes, seconds)
     }
     
     private func formatTargetTime(_ context: ActivityViewContext<SleepCountdownWidgetAttributes>) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
-        return formatter.string(from: context.state.isBeforeBedtime ? context.attributes.bedtime : context.attributes.wakeupTime)
+        return formatter.string(from: context.state.isSleepingPeriod ? context.attributes.wakeupTime : context.attributes.bedtime)
     }
     
     private func formatTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
         return formatter.string(from: date)
+    }
+    
+    // Nouveau modifieur pour rendre le texte responsif
+    private func responsiveTimeText(_ text: String) -> some View {
+        GeometryReader { geometry in
+            Text(text)
+                .font(.system(.title2, design: .monospaced, weight: .bold))
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
+                .foregroundStyle(.white)
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .trailing)
+        }
     }
 }
 
@@ -155,7 +182,14 @@ extension SleepCountdownWidgetAttributes.ContentState {
         SleepCountdownWidgetAttributes.ContentState(
             timeRemaining: 30 * 60, // 30 minutes
             isBeforeBedtime: true,
-            progress: 0.8
+            isSleepingPeriod: false,
+            progress: 0.8,
+            bedtimeIcon: "bed.double.fill",
+            wakeupIcon: "alarm.fill",
+            alertIcon: "exclamationmark.triangle.fill",
+            bedtimeText: "Coucher",
+            wakeupText: "Réveil",
+            alertText: "Attention"
         )
     }
      
@@ -163,7 +197,14 @@ extension SleepCountdownWidgetAttributes.ContentState {
         SleepCountdownWidgetAttributes.ContentState(
             timeRemaining: 15 * 60, // 15 minutes
             isBeforeBedtime: false,
-            progress: 0.9
+            isSleepingPeriod: true,
+            progress: 0.9,
+            bedtimeIcon: "alarm.fill",
+            wakeupIcon: "bed.double.fill",
+            alertIcon: "exclamationmark.triangle.fill",
+            bedtimeText: "Réveil",
+            wakeupText: "Coucher",
+            alertText: "Attention"
         )
     }
 }
