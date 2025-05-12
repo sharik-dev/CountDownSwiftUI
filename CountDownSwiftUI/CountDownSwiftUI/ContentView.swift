@@ -7,6 +7,7 @@
 import SwiftUI
 import WidgetKit
 import PhotosUI
+import DesignSystemKit
 
 // Classe d'aide pour la gestion des images d'arrière-plan
 class BackgroundManager {
@@ -210,38 +211,30 @@ class BackgroundManager {
 }
 
 struct ContentView: View {
-    @AppStorage("bedtime", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("bedtime", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var bedtime = Calendar.current.date(from: DateComponents(hour: 22, minute: 0)) ?? Date()
-    @AppStorage("wakeupTime", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("wakeupTime", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var wakeupTime = Calendar.current.date(from: DateComponents(hour: 7, minute: 0)) ?? Date()
-    @AppStorage("isDarkMode", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
-    private var isDarkMode = false
-    @AppStorage("accentColor", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("accentColor", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var accentColorString = "blue"
     
     // Nouveaux paramètres pour la personnalisation des textes et icônes
-    @AppStorage("bedtimeIcon", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("bedtimeIcon", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var bedtimeIcon = "bed.double.fill"
-    @AppStorage("wakeupIcon", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("wakeupIcon", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var wakeupIcon = "alarm.fill"
-    @AppStorage("alertIcon", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("alertIcon", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var alertIcon = "exclamationmark.triangle.fill"
     
-    @AppStorage("bedtimeText", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("bedtimeText", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var bedtimeText = "Time until bedtime"
-    @AppStorage("wakeupText", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("wakeupText", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var wakeupText = "Time until wake-up"
-    @AppStorage("alertText", store: UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")) 
+    @AppStorage("alertText", store: UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")) 
     private var alertText = "Sleep time running out!"
     
     // Ajout du gestionnaire d'activité en direct
     @StateObject private var activityManager = SleepActivityManager()
-    
-    // État pour gérer l'affichage de l'alerte de confirmation
-    @State private var showingSaveConfirmation = false
-    
-    // État pour basculer entre les vues petite et moyenne
-    @State private var showSmallPreview = false
     
     // État pour gérer l'affichage des sections de personnalisation
     @State private var showingBedtimeSettings = false
@@ -251,6 +244,9 @@ struct ContentView: View {
     // Temporisateur pour les mises à jour
     @State private var updateTimer: Timer?
     
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
+
     private var accentColor: Color {
         switch accentColorString {
         case "blue": return .blue
@@ -262,190 +258,85 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Sleep Schedule")) {
-                    DatePicker("Bedtime", selection: $bedtime, displayedComponents: .hourAndMinute)
-                        .onChange(of: bedtime) { _ in
-                            // Ne pas mettre à jour le widget immédiatement
-                            // updateWidget() 
-                            // Mettre à jour l'activité en direct si elle est active
-                            if activityManager.isActivityActive {
-                                activityManager.endActivityFromView()
-                                activityManager.startActivityFromView(bedtime: bedtime, wakeupTime: wakeupTime)
-                            }
-                        }
-                    
-                    DatePicker("Wake-up Time", selection: $wakeupTime, displayedComponents: .hourAndMinute)
-                        .onChange(of: wakeupTime) { _ in
-                            // Ne pas mettre à jour le widget immédiatement
-                            // updateWidget()
-                            // Mettre à jour l'activité en direct si elle est active
-                            if activityManager.isActivityActive {
-                                activityManager.endActivityFromView()
-                                activityManager.startActivityFromView(bedtime: bedtime, wakeupTime: wakeupTime)
-                            }
-                        }
-                    
-                    Button("Enregistrer") {
-                        updateWidget()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(accentColor)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                }
-                
-                Section(header: Text("Widget Preview")) {
-                    // Ajout d'un bouton pour basculer entre les vues
-                    HStack {
-                        Button(action: {
-                            showSmallPreview.toggle()
-                        }) {
-                            HStack {
-                                Image(systemName: showSmallPreview ? "rectangle" : "square")
-                                Text(showSmallPreview ? "Show Medium" : "Show Small")
-                            }
-                        }
-                        .padding(8)
-                        .background(accentColor.opacity(0.2))
-                        .cornerRadius(8)
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical, 5)
-                    
-                    CountdownPreview(
-                        bedtime: bedtime, 
-                        wakeupTime: wakeupTime, 
-                        isDarkMode: isDarkMode, 
-                        accentColor: accentColor,
-                        isSmall: showSmallPreview,
-                        bedtimeIcon: bedtimeIcon,
-                        wakeupIcon: wakeupIcon,
-                        alertIcon: alertIcon,
-                        bedtimeText: bedtimeText,
-                        wakeupText: wakeupText,
-                        alertText: alertText
-                    )
-                    .frame(height: 150)
-                    .cornerRadius(15)
-                }
-                
-                Section(header: Text("Widget Appearance")) {
-                    Toggle("Dark Mode", isOn: $isDarkMode)
-                    
-                    Picker("Widget Color", selection: $accentColorString) {
-                        Text("Blue").tag("blue")
-                        Text("Red").tag("red")
-                        Text("Green").tag("green")
-                        Text("Purple").tag("purple")
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                }
-                
-                // Section pour personnaliser le texte et les icônes du widget
-                Section(header: Text("Widget Personalization")) {
-                    DisclosureGroup(
-                        isExpanded: $showingBedtimeSettings,
-                        content: {
-                            TextField("Bedtime text", text: $bedtimeText)
-                                .padding(.vertical, 4)
-                            
-                            // Sélecteur d'icône pour l'heure du coucher
-                            IconPicker(title: "Bedtime icon", selection: $bedtimeIcon)
-                        },
-                        label: {
-                            HStack {
-                                Image(systemName: bedtimeIcon)
-                                    .foregroundColor(accentColor)
-                                Text("Bedtime Display")
-                            }
-                        }
-                    )
-                    
-                    DisclosureGroup(
-                        isExpanded: $showingWakeupSettings,
-                        content: {
-                            TextField("Wake-up text", text: $wakeupText)
-                                .padding(.vertical, 4)
-                            
-                            // Sélecteur d'icône pour l'heure du réveil
-                            IconPicker(title: "Wake-up icon", selection: $wakeupIcon)
-                        },
-                        label: {
-                            HStack {
-                                Image(systemName: wakeupIcon)
-                                    .foregroundColor(accentColor)
-                                Text("Wake-up Display")
-                            }
-                        }
-                    )
-                    
-                    DisclosureGroup(
-                        isExpanded: $showingAlertSettings,
-                        content: {
-                            TextField("Alert text", text: $alertText)
-                                .padding(.vertical, 4)
-                            
-                            // Sélecteur d'icône pour l'alerte
-                            IconPicker(title: "Alert icon", selection: $alertIcon)
-                        },
-                        label: {
-                            HStack {
-                                Image(systemName: alertIcon)
-                                    .foregroundColor(.red)
-                                Text("Alert Display")
-                            }
-                        }
-                    )
-                }
-                
-                Section(header: Text("About")) {
-                    Text("This app shows a countdown to your bedtime or wake-up time in a widget.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .navigationTitle("Sleep Countdown")
-            .overlay(
-                // Afficher un message de confirmation lorsque les préférences sont enregistrées
-                ZStack {
-                    if showingSaveConfirmation {
-                        VStack {
-                            Text("Préférences enregistrées")
-                                .font(.headline)
-                                .padding()
-                                .background(Color.black.opacity(0.7))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        .transition(.scale.combined(with: .opacity))
-                        .animation(.easeInOut, value: showingSaveConfirmation)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        TabView {
+            // Tab 1: Sleep Schedule
+            ScheduleView(
+                bedtime: $bedtime,
+                wakeupTime: $wakeupTime,
+                updateWidget: updateWidgetAutomatically
             )
-            .onDisappear {
-                // Annuler le timer lorsque la vue disparaît
-                cancelUpdateTimer()
+            .tabItem {
+                Label("Schedule", systemImage: "clock.fill")
+            }
+            
+            // Tab 2: Widget Preview
+            PreviewView(
+                bedtime: bedtime, 
+                wakeupTime: wakeupTime, 
+                accentColor: accentColor,
+                bedtimeIcon: bedtimeIcon,
+                wakeupIcon: wakeupIcon,
+                alertIcon: alertIcon,
+                bedtimeText: bedtimeText,
+                wakeupText: wakeupText,
+                alertText: alertText
+            )
+            .tabItem {
+                Label("Preview", systemImage: "eye.fill")
+            }
+            
+            // Tab 3: Appearance
+            AppearanceView(
+                accentColorString: $accentColorString,
+                updateWidget: updateWidgetAutomatically
+            )
+            .tabItem {
+                Label("Appearance", systemImage: "paintbrush.fill")
+            }
+            
+            // Tab 4: Personalization
+            PersonalizationView(
+                bedtimeIcon: $bedtimeIcon,
+                wakeupIcon: $wakeupIcon,
+                alertIcon: $alertIcon,
+                bedtimeText: $bedtimeText,
+                wakeupText: $wakeupText,
+                alertText: $alertText,
+                showingBedtimeSettings: $showingBedtimeSettings,
+                showingWakeupSettings: $showingWakeupSettings,
+                showingAlertSettings: $showingAlertSettings,
+                accentColor: accentColor,
+                updateWidget: updateWidgetAutomatically
+            )
+            .tabItem {
+                Label("Customize", systemImage: "gearshape.fill")
+            }
+            
+            // Tab 5: About
+            AboutView()
+            .tabItem {
+                Label("About", systemImage: "info.circle.fill")
             }
         }
+        .accentColor(accentColor)
+        .preferredColorScheme(.dark) // Forcer le mode sombre
+        .onDisappear {
+            // Annuler le timer lorsque la vue disparaît
+            cancelUpdateTimer()
+        }
+    }
+    
+    // Fonction d'enregistrement automatique
+    private func updateWidgetAutomatically() {
+        debounceUpdateWidget()
     }
     
     private func updateWidget() {
         // Forcer la synchronisation des UserDefaults
-        UserDefaults(suiteName: "group.com.tempest.CountDownSwiftUI")?.synchronize()
+        UserDefaults(suiteName: "group.com.yourcompany.CountDownSwiftUI")?.synchronize()
         
         // Recharger le widget
         WidgetCenter.shared.reloadAllTimelines()
-        
-        // Afficher une confirmation
-        showingSaveConfirmation = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.showingSaveConfirmation = false
-        }
         
         // Mettre à jour l'activité en direct si elle est active
         if activityManager.isActivityActive {
@@ -470,16 +361,350 @@ struct ContentView: View {
     }
 }
 
+// MARK: - View Structures for Tabs
+
+struct ScheduleView: View {
+    @Binding var bedtime: Date
+    @Binding var wakeupTime: Date
+    var updateWidget: () -> Void
+    
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                
+                VStack(spacing: 10) {
+                    DatePicker("Bedtime", selection: $bedtime, displayedComponents: .hourAndMinute)
+                        .font(dsTheme.typography.body)
+                        .padding(.horizontal)
+                        .onChange(of: bedtime) { _ in
+                            updateWidget()
+                        }
+                    
+                    DatePicker("Wake-up Time", selection: $wakeupTime, displayedComponents: .hourAndMinute)
+                        .font(dsTheme.typography.body)
+                        .padding(.horizontal)
+                        .onChange(of: wakeupTime) { _ in
+                            updateWidget()
+                        }
+                }
+                .padding(.vertical, 10)
+                .background(dsTheme.colors.background)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+            }
+            .padding(.vertical)
+            .navigationTitle("Sleep Schedule")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(red: 30/255, green: 32/255, blue: 44/255))
+        }
+    }
+}
+
+struct PreviewView: View {
+    let bedtime: Date
+    let wakeupTime: Date
+    let accentColor: Color
+    let bedtimeIcon: String
+    let wakeupIcon: String
+    let alertIcon: String
+    let bedtimeText: String
+    let wakeupText: String
+    let alertText: String
+    
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                
+                CountdownPreview(
+                    bedtime: bedtime, 
+                    wakeupTime: wakeupTime, 
+                    accentColor: accentColor,
+                    bedtimeIcon: bedtimeIcon,
+                    wakeupIcon: wakeupIcon,
+                    alertIcon: alertIcon,
+                    bedtimeText: bedtimeText,
+                    wakeupText: wakeupText,
+                    alertText: alertText
+                )
+                .frame(height: 150)
+                .cornerRadius(15)
+                .padding(.horizontal)
+                
+                Spacer()
+            }
+            .padding(.vertical)
+            .navigationTitle("Widget Preview")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(red: 30/255, green: 32/255, blue: 44/255))
+        }
+    }
+}
+
+struct AppearanceView: View {
+    @Binding var accentColorString: String
+    var updateWidget: () -> Void
+    
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                Text("Widget Appearance")
+                    .font(dsTheme.typography.caption)
+                    .foregroundColor(dsTheme.colors.secondary)
+                    .padding(.horizontal)
+                    .padding(.top)
+                    .padding(.bottom, 5)
+                
+                // Widget Color
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Widget Color")
+                        .font(dsTheme.typography.body)
+                        .foregroundColor(dsTheme.colors.text)
+                        .padding(.horizontal)
+                        .padding(.top, 12)
+                    
+                    // Une simple HStack avec des boutons de couleur
+                    HStack(spacing: 20) {
+                        Spacer()
+                        colorButton("blue", color: .blue)
+                        colorButton("red", color: .red)
+                        colorButton("green", color: .green)
+                        colorButton("purple", color: .purple)
+                        Spacer()
+                    }
+                    .padding(.bottom, 12)
+                }
+                .background(dsTheme.colors.background)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+            }
+            .padding(.vertical)
+            .navigationTitle("Appearance")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(red: 30/255, green: 32/255, blue: 44/255))
+        }
+    }
+    
+    private func colorButton(_ tag: String, color: Color) -> some View {
+        Button(action: {
+            accentColorString = tag
+            updateWidget()
+        }) {
+            ZStack {
+                Circle()
+                    .fill(color)
+                    .frame(width: 40, height: 40)
+                
+                if accentColorString == tag {
+                    // Utiliser un cercle avec une bordure plus fine et transparente
+                    Circle()
+                        .stroke(Color.white, lineWidth: 2)
+                        .frame(width: 40, height: 40)
+                }
+            }
+            // Ajouter du padding pour éviter que les cercles se touchent
+            .padding(3)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct PersonalizationView: View {
+    @Binding var bedtimeIcon: String
+    @Binding var wakeupIcon: String
+    @Binding var alertIcon: String
+    @Binding var bedtimeText: String
+    @Binding var wakeupText: String
+    @Binding var alertText: String
+    @Binding var showingBedtimeSettings: Bool
+    @Binding var showingWakeupSettings: Bool
+    @Binding var showingAlertSettings: Bool
+    let accentColor: Color
+    var updateWidget: () -> Void
+    
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                Text("Widget Personalization")
+                    .font(dsTheme.typography.caption)
+                    .foregroundColor(dsTheme.colors.secondary)
+                    .padding(.horizontal)
+                    .padding(.top)
+                    .padding(.bottom, 5)
+                
+                VStack {
+                    disclosureSection(
+                        isExpanded: $showingBedtimeSettings,
+                        icon: bedtimeIcon,
+                        title: "Bedtime Display",
+                        iconColor: accentColor,
+                        content: {
+                            VStack(alignment: .leading) {
+                                TextField("Bedtime text", text: $bedtimeText)
+                                    .font(dsTheme.typography.body)
+                                    .padding(.vertical, 4)
+                                    .foregroundColor(dsTheme.colors.text)
+                                    .onChange(of: bedtimeText) { _ in
+                                        updateWidget()
+                                    }
+                                
+                                IconPicker(title: "Bedtime icon", selection: $bedtimeIcon)
+                                    .environment(\.dsTheme, dsTheme)
+                            }
+                            .padding(.horizontal)
+                        }
+                    )
+                    
+                    disclosureSection(
+                        isExpanded: $showingWakeupSettings,
+                        icon: wakeupIcon,
+                        title: "Wake-up Display",
+                        iconColor: accentColor,
+                        content: {
+                            VStack(alignment: .leading) {
+                                TextField("Wake-up text", text: $wakeupText)
+                                    .font(dsTheme.typography.body)
+                                    .padding(.vertical, 4)
+                                    .foregroundColor(dsTheme.colors.text)
+                                    .onChange(of: wakeupText) { _ in
+                                        updateWidget()
+                                    }
+                                
+                                IconPicker(title: "Wake-up icon", selection: $wakeupIcon)
+                                    .environment(\.dsTheme, dsTheme)
+                            }
+                            .padding(.horizontal)
+                        }
+                    )
+                    
+                    disclosureSection(
+                        isExpanded: $showingAlertSettings,
+                        icon: alertIcon,
+                        title: "Alert Display",
+                        iconColor: .red,
+                        content: {
+                            VStack(alignment: .leading) {
+                                TextField("Alert text", text: $alertText)
+                                    .font(dsTheme.typography.body)
+                                    .padding(.vertical, 4)
+                                    .foregroundColor(dsTheme.colors.text)
+                                    .onChange(of: alertText) { _ in
+                                        updateWidget()
+                                    }
+                                
+                                IconPicker(title: "Alert icon", selection: $alertIcon)
+                                    .environment(\.dsTheme, dsTheme)
+                            }
+                            .padding(.horizontal)
+                        }
+                    )
+                }
+                .background(dsTheme.colors.background)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+            }
+            .padding(.vertical)
+            .navigationTitle("Personalization")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(red: 30/255, green: 32/255, blue: 44/255))
+        }
+    }
+    
+    // Fonction pour créer une section dépliable personnalisée
+    private func disclosureSection<Content: View>(
+        isExpanded: Binding<Bool>,
+        icon: String,
+        title: String,
+        iconColor: Color,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        VStack(spacing: 0) {
+            Button(action: {
+                withAnimation {
+                    isExpanded.wrappedValue.toggle()
+                }
+            }) {
+                HStack {
+                    Image(systemName: icon)
+                        .foregroundColor(iconColor)
+                    Text(title)
+                        .font(dsTheme.typography.body)
+                    Spacer()
+                    Image(systemName: isExpanded.wrappedValue ? "chevron.up" : "chevron.down")
+                        .foregroundColor(dsTheme.colors.secondary)
+                }
+                .padding()
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            if isExpanded.wrappedValue {
+                Divider()
+                content()
+                    .padding(.vertical)
+            }
+        }
+    }
+}
+
+struct AboutView: View {
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                Text("About")
+                    .font(dsTheme.typography.caption)
+                    .foregroundColor(dsTheme.colors.secondary)
+                    .padding(.horizontal)
+                    .padding(.top)
+                    .padding(.bottom, 5)
+                
+                Text("This app shows a countdown to your bedtime or wake-up time in a widget.")
+                    .font(dsTheme.typography.caption)
+                    .foregroundColor(dsTheme.colors.secondary)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(dsTheme.colors.background)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                
+                Spacer()
+            }
+            .padding(.vertical)
+            .navigationTitle("About")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(red: 30/255, green: 32/255, blue: 44/255))
+        }
+    }
+}
+
 struct CountdownPreview: View {
     let bedtime: Date
     let wakeupTime: Date
-    let isDarkMode: Bool
     let accentColor: Color
     @State private var currentTime = Date()
     @State private var opacity: Double = 1.0
     @State private var alertIconOpacity: Double = 1.0
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    var isSmall: Bool = false // Par défaut, on montre la version medium
     
     // Nouvelles propriétés personnalisables
     let bedtimeIcon: String
@@ -488,6 +713,9 @@ struct CountdownPreview: View {
     let bedtimeText: String
     let wakeupText: String
     let alertText: String
+    
+    // Accès au thème de design
+    @Environment(\.dsTheme) private var dsTheme
     
     // 🖌️ UI DE LA PREVIEW - DÉBUT
     var body: some View {
@@ -525,23 +753,18 @@ struct CountdownPreview: View {
                         // Éléments décoratifs
                         decorations(geometry: geometry)
                         
-                        // Interface principale qui diffère selon la taille choisie
-                        if isSmall {
-                            smallWidget
-                        } else {
-                            mediumWidget
-                        }
+                        // Interface principale
+                        smallWidget
                     }
                 )
-                .onReceive(timer) { _ in
-                    currentTime = Date()
-                }
-                .id(currentTime) // Forcer la mise à jour de la vue
         }
-        .ignoresSafeArea(.all) // Assurer que tout s'étend aux bords
+        .onReceive(timer) { _ in
+            currentTime = Date()
+        }
+        .id(currentTime) // Forcer la mise à jour de la vue
     }
     
-    // Version simplifiée pour petit widget
+    // Version du widget
     var smallWidget: some View {
         VStack(spacing: 4) {
             HStack {
@@ -550,7 +773,7 @@ struct CountdownPreview: View {
                     .font(.system(size: 16))
                 
                 Text(titleText)
-                    .font(.caption2)
+                    .font(.system(size: 16, weight: .medium))
                     .lineLimit(1)
                     .foregroundColor(.white)
             }
@@ -559,7 +782,7 @@ struct CountdownPreview: View {
             // Utilisation de GeometryReader pour adapter la taille du texte
             GeometryReader { geometry in
                 Text(timeRemainingFormatted)
-                    .font(.system(size: min(geometry.size.width / 6, 28), weight: .bold))
+                    .font(dsTheme.typography.title)
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
                     .foregroundColor(.white)
@@ -569,45 +792,12 @@ struct CountdownPreview: View {
             .frame(height: 30)
             
             Text(subtitleText)
-                .font(.caption2)
+                .font(.system(size: 16, weight: .medium))
                 .lineLimit(1)
                 .foregroundColor(.white.opacity(0.7))
                 .padding(.bottom, 2)
         }
         .padding(8)
-    }
-    
-    // Version complète pour widget medium
-    var mediumWidget: some View {
-        VStack(spacing: 8) {
-            HStack {
-                Image(systemName: iconName)
-                    .foregroundColor(.white)
-                    .font(.system(size: 22))
-                
-                Text(titleText)
-                    .font(.headline)
-                    .foregroundColor(.white)
-            }
-            .padding(.top, 4)
-            
-            // Utilisation de GeometryReader pour adapter la taille du texte
-            GeometryReader { geometry in
-                Text(timeRemainingFormatted)
-                    .font(.system(size: min(geometry.size.width / 8, 42), weight: .bold))
-                    .minimumScaleFactor(0.6)
-                    .lineLimit(1)
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 1, y: 1)
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-            }
-            .frame(height: 50)
-            
-            Text(subtitleText)
-                .font(.caption)
-                .foregroundColor(.white.opacity(0.7))
-        }
-        .padding(12)
     }
     
     // Fonction pour les éléments décoratifs
@@ -617,15 +807,12 @@ struct CountdownPreview: View {
                 // Aucune décoration pour le thème de sommeil
                 EmptyView()
             } else if !showBedtimeCountdown && !timeIsRunningOut() {
-                // Soleil pour le thème de réveil
-                Image(systemName: "sun.max.fill")
-                    .foregroundColor(.yellow.opacity(0.7))
-                    .font(.system(size: 32))
-                    .position(x: geometry.size.width - 40, y: 25)
+                // Aucune décoration (suppression de l'icône soleil)
+                EmptyView()
             } else if timeIsRunningOut() {
                 // Icône d'alerte pour manque de sommeil
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.yellow)
+                    .foregroundColor(.white)
                     .font(.system(size: 32))
                     .position(x: geometry.size.width - 40, y: 25)
                     .opacity(alertIconOpacity)
@@ -642,9 +829,7 @@ struct CountdownPreview: View {
     // Propriétés calculées pour le texte et les couleurs
     var backgroundColor: Color {
         if timeIsRunningOut() && !showBedtimeCountdown {
-            return Color.red
-        } else if isDarkMode {
-            return Color.black
+            return .red
         } else {
             return accentColor
         }
@@ -672,7 +857,7 @@ struct CountdownPreview: View {
     
     var subtitleText: String {
         if timeIsRunningOut() && !showBedtimeCountdown {
-            return "Only \(hoursSleepRemaining()) hours of sleep!"
+            return ""
         } else {
             return targetTimeFormatted
         }
@@ -687,7 +872,7 @@ struct CountdownPreview: View {
         return timeToBedtime < timeToWakeup
     }
     
-    // Vérifie si le temps de sommeil restant est insuffisant (moins de 7 heures)
+    // Vérifie si l'heure du coucher est dépassée de 30 minutes
     private func timeIsRunningOut() -> Bool {
         if showBedtimeCountdown {
             return false // Pas d'alerte avant l'heure du coucher
@@ -695,22 +880,29 @@ struct CountdownPreview: View {
         
         let calendar = Calendar.current
         
-        // Heure du réveil
-        let wakeComponents = calendar.dateComponents([.hour, .minute], from: wakeupTime)
-        let currentComponents = calendar.dateComponents([.hour, .minute], from: currentTime)
+        // Obtenir l'heure de coucher pour aujourd'hui
+        var bedtimeComponents = calendar.dateComponents([.year, .month, .day], from: currentTime)
+        let bedtimeTimeComponents = calendar.dateComponents([.hour, .minute], from: bedtime)
+        bedtimeComponents.hour = bedtimeTimeComponents.hour
+        bedtimeComponents.minute = bedtimeTimeComponents.minute
+        let bedtimeToday = calendar.date(from: bedtimeComponents)!
         
-        // Heure actuelle convertie en minutes depuis minuit
-        let currentMinutes = currentComponents.hour! * 60 + currentComponents.minute!
-        // Heure du réveil convertie en minutes depuis minuit
-        let wakeMinutes = wakeComponents.hour! * 60 + wakeComponents.minute!
+        // Ajouter 30 minutes à l'heure du coucher
+        let bedtimePlusThirtyMin = calendar.date(byAdding: .minute, value: 30, to: bedtimeToday)!
         
-        // Si l'heure du réveil est plus tôt que l'heure actuelle, elle est le lendemain
-        let minutesToWakeup = wakeMinutes < currentMinutes ? 
-            (wakeMinutes + 24 * 60) - currentMinutes : 
-            wakeMinutes - currentMinutes
+        // Vérifier si l'heure actuelle est après l'heure du coucher + 30 min
+        // mais avant l'heure du réveil
+        let isAfterBedtimePlusThirty = currentTime > bedtimePlusThirtyMin
         
-        // Alerte si moins de 7 heures de sommeil restantes
-        return minutesToWakeup < 7 * 60
+        // Vérifier si le coucher était hier (si on est dans une nouvelle journée)
+        let isNewDay = bedtimeToday > currentTime
+        
+        // Si c'est une nouvelle journée, vérifier si on est dans les 30 minutes après minuit
+        let isWithinThirtyMinAfterMidnight = isNewDay && (calendar.dateComponents([.hour, .minute], from: currentTime).hour! * 60 + calendar.dateComponents([.hour, .minute], from: currentTime).minute! < 30)
+        
+        // L'alerte s'affiche seulement si on est après l'heure du coucher + 30 min
+        // ou si c'est une nouvelle journée et on est dans les 30 minutes après minuit
+        return isAfterBedtimePlusThirty || isWithinThirtyMinAfterMidnight
     }
     
     // Calcule le nombre d'heures de sommeil restantes
@@ -731,9 +923,11 @@ struct CountdownPreview: View {
         let hours = minutesToWakeup / 60
         let minutes = minutesToWakeup % 60
         
-        return String(format: "%d:%02d", hours, minutes)
+        // Format pour le texte d'alerte
+        return String(format: "%d hours and %d minutes", hours, minutes)
     }
     
+    // Fonction qui calcule le temps restant (utilisée pour le décompte)
     private func calculateTimeRemaining(to targetTime: Date) -> TimeInterval {
         let calendar = Calendar.current
         
@@ -742,7 +936,7 @@ struct CountdownPreview: View {
         let targetTimeComponents = calendar.dateComponents([.hour, .minute], from: targetTime)
         targetComponents.hour = targetTimeComponents.hour
         targetComponents.minute = targetTimeComponents.minute
-        targetComponents.second = 0
+        targetComponents.second = 0 // Réinitialiser les secondes à zéro
         
         var targetDate = calendar.date(from: targetComponents)!
         
@@ -754,19 +948,20 @@ struct CountdownPreview: View {
         return targetDate.timeIntervalSince(currentTime)
     }
     
+    // Format du temps restant affiché dans le widget (sans secondes)
     private var timeRemainingFormatted: String {
         let timeRemaining = showBedtimeCountdown ? 
             calculateTimeRemaining(to: bedtime) : 
             calculateTimeRemaining(to: wakeupTime)
         
-        // Formater avec les heures, minutes et secondes
+        // Formater avec les heures et minutes uniquement
         let hours = Int(timeRemaining) / 3600
         let minutes = (Int(timeRemaining) % 3600) / 60
-        let seconds = (Int(timeRemaining) % 60) / 10 * 10 // Arrondir aux dizaines
         
-        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        return String(format: "%dh %02dm", hours, minutes)
     }
     
+    // Format de l'heure cible affichée en sous-titre
     private var targetTimeFormatted: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
@@ -774,101 +969,11 @@ struct CountdownPreview: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-
-// 🖌️ PREVIEWS POUR LE DÉVELOPPEMENT DE LA PREVIEW
-struct CountdownPreview_Previews: PreviewProvider {
-    static var previews: some View {
-        // Preview - Mode coucher
-        CountdownPreview(
-            bedtime: Calendar.current.date(from: DateComponents(hour: 22, minute: 0)) ?? Date(),
-            wakeupTime: Calendar.current.date(from: DateComponents(hour: 7, minute: 0)) ?? Date(),
-            isDarkMode: false,
-            accentColor: .blue,
-            isSmall: false,
-            bedtimeIcon: "bed.double.fill",
-            wakeupIcon: "alarm.fill",
-            alertIcon: "exclamationmark.triangle.fill",
-            bedtimeText: "Time until bedtime",
-            wakeupText: "Time until wake-up",
-            alertText: "Sleep time running out!"
-        )
-        .frame(height: 150)
-        .previewLayout(.sizeThatFits)
-        .previewDisplayName("Preview - Bedtime Mode")
-        
-        // Preview - Mode réveil
-        CountdownPreview(
-            bedtime: Calendar.current.date(from: DateComponents(hour: 22, minute: 0)) ?? Date(),
-            wakeupTime: Calendar.current.date(from: DateComponents(hour: 7, minute: 0)) ?? Date(),
-            isDarkMode: true,
-            accentColor: .purple,
-            isSmall: true,
-            bedtimeIcon: "bed.double.fill",
-            wakeupIcon: "alarm.fill",
-            alertIcon: "exclamationmark.triangle.fill",
-            bedtimeText: "Time until bedtime",
-            wakeupText: "Time until wake-up",
-            alertText: "Sleep time running out!"
-        )
-        .frame(height: 150)
-        .previewLayout(.sizeThatFits)
-        .previewDisplayName("Preview - Wakeup Mode")
-        
-        // Preview - Mode alerte
-        CountdownPreview(
-            bedtime: Calendar.current.date(from: DateComponents(hour: 2, minute: 0)) ?? Date(),
-            wakeupTime: Calendar.current.date(from: DateComponents(hour: 7, minute: 0)) ?? Date(),
-            isDarkMode: false,
-            accentColor: .red,
-            isSmall: false,
-            bedtimeIcon: "bed.double.fill",
-            wakeupIcon: "alarm.fill",
-            alertIcon: "exclamationmark.triangle.fill",
-            bedtimeText: "Time until bedtime",
-            wakeupText: "Time until wake-up",
-            alertText: "Sleep time running out!"
-        )
-        .frame(height: 150)
-        .previewLayout(.sizeThatFits)
-        .previewDisplayName("Preview - Alert Mode")
-    }
-}
-
-/* 
- * GUIDE RAPIDE DE PERSONNALISATION:
- * 
- * 1. COULEURS ET APPARENCE:
- *    - backgroundColor: définit la couleur de fond
- *    - Ajoute des dégradés avec LinearGradient:
- *      LinearGradient(gradient: Gradient(colors: [.blue, .purple]), 
- *                    startPoint: .topLeading, endPoint: .bottomTrailing)
- *    - Effet de verre: .background(.ultraThinMaterial) ou .regularMaterial
- *
- * 2. ÉLÉMENTS DÉCORATIFS:
- *    - Modifie les éléments dans decorations()
- *    - Ajoute des formes: Circle(), Rectangle(), RoundedRectangle()
- *    - Applique des effets: .blur(), .shadow(), .overlay()
- *
- * 3. ANIMATIONS:
- *    - Types: .easeInOut, .spring(), .linear
- *    - Animation complexes: 
- *      withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) { ... }
- *
- * 4. ASTUCES SWIFTUI:
- *    - Pour des éléments chevauchants, utilise ZStack
- *    - Pour des alignements précis, utilise .position() ou .offset()
- *    - Pour des animations personnalisées, exploite .animation(value:) et .transition()
- */
-
 // Composant pour sélectionner une icône
 struct IconPicker: View {
     let title: String
     @Binding var selection: String
+    @Environment(\.dsTheme) private var dsTheme
     @State private var showingIconSheet = false
     
     // Liste d'icônes disponibles
@@ -883,8 +988,8 @@ struct IconPicker: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .font(dsTheme.typography.caption)
+                .foregroundColor(dsTheme.colors.secondary)
             
             Button(action: {
                 showingIconSheet = true
@@ -892,10 +997,10 @@ struct IconPicker: View {
                 HStack {
                     Image(systemName: selection)
                         .font(.title2)
-                        .foregroundColor(.primary)
+                        .foregroundColor(dsTheme.colors.text)
                     Spacer()
                     Text("Change")
-                        .foregroundColor(.blue)
+                        .foregroundColor(dsTheme.colors.primary)
                 }
                 .padding(.vertical, 6)
             }
@@ -912,11 +1017,11 @@ struct IconPicker: View {
                                         Image(systemName: icon)
                                             .font(.system(size: 32))
                                             .frame(width: 60, height: 60)
-                                            .background(icon == selection ? Color.blue.opacity(0.2) : Color.clear)
+                                            .background(icon == selection ? dsTheme.colors.primary.opacity(0.2) : Color.clear)
                                             .cornerRadius(10)
                                         Text(iconName(for: icon))
-                                            .font(.caption2)
-                                            .foregroundColor(.secondary)
+                                            .font(dsTheme.typography.caption)
+                                            .foregroundColor(dsTheme.colors.secondary)
                                     }
                                 }
                                 .buttonStyle(PlainButtonStyle())
@@ -924,11 +1029,17 @@ struct IconPicker: View {
                         }
                         .padding()
                     }
+                    .scrollIndicators(.visible)
                     .navigationTitle("Select Icon")
+                    .foregroundColor(dsTheme.colors.text)
+                    .background(dsTheme.colors.background)
                     .navigationBarItems(trailing: Button("Cancel") {
                         showingIconSheet = false
                     })
+                    .accentColor(dsTheme.colors.primary)
                 }
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             }
         }
     }
@@ -938,5 +1049,20 @@ struct IconPicker: View {
         let components = systemName.split(separator: ".")
         let base = components.first ?? ""
         return base.replacingOccurrences(of: "-", with: " ").capitalized
+    }
+}
+
+// Extension pour améliorer le comportement de ScrollView
+// Cette extension résout le problème de décalage qui peut se produire
+// lorsque les ScrollViews sont présentées dans des feuilles modales
+extension UIScrollView {
+    open override func didMoveToWindow() {
+        super.didMoveToWindow()
+        
+        // Réinitialiser le décalage de contenu lors de l'apparition dans une nouvelle fenêtre
+        // Cela corrige les problèmes de défilement qui peuvent survenir quand une sheet est présentée
+        if window != nil {
+            flashScrollIndicators()
+        }
     }
 }

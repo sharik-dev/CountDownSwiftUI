@@ -66,6 +66,7 @@ struct SleepCountdownWidgetEntryView : View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: SleepCountdownProvider.Entry
     @State private var alertIconOpacity: Double = 1.0
+    @State private var opacity: Double = 1.0
     
     // Utiliser les valeurs de l'entrée
     var bedtime: Date { entry.bedtime }
@@ -144,12 +145,11 @@ struct SleepCountdownWidgetEntryView : View {
         // Calculer la différence
         let timeRemaining = targetDate.timeIntervalSince(entry.date)
         
-        // Formater avec les heures, minutes et secondes (même format que dans CountdownPreview)
+        // Formater avec les heures et minutes uniquement
         let hours = Int(timeRemaining) / 3600
         let minutes = (Int(timeRemaining) % 3600) / 60
-        let seconds = (Int(timeRemaining) % 60) / 10 * 10 // Arrondir aux 10 secondes
         
-        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        return String(format: "%dh %02dm", hours, minutes)
     }
     
     var targetTimeFormatted: String {
@@ -160,20 +160,33 @@ struct SleepCountdownWidgetEntryView : View {
 
     // 🖌️ UI DU WIDGET - DÉBUT
     var body: some View {
-        ZStack {
-            // Interface principale qui diffère selon la taille du widget
-            if widgetFamily == .systemSmall {
-                smallWidget
-            } else {
-                mediumWidget
-            }
-            
-            // Éléments décoratifs en overlay
-            GeometryReader { geometry in
-                decorations(geometry: geometry)
-            }
+        // Utiliser un conteneur transparent pour que la couleur s'étende aux bords
+        GeometryReader { geometry in
+            Color.clear
+                .overlay(
+                    ZStack {
+                        // Fond coloré qui occupe tout l'espace
+                        backgroundColor
+                            .opacity(timeIsRunningOut() && !isBeforeBedtime ? opacity : 1.0)
+                            .onAppear {
+                                if timeIsRunningOut() && !isBeforeBedtime {
+                                    withAnimation(Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                                        opacity = 0.6
+                                    }
+                                }
+                            }
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        // Interface principale qui diffère selon la taille du widget
+                        if widgetFamily == .systemSmall {
+                            smallWidget
+                        } else {
+                            mediumWidget
+                        }
+                    }
+                )
         }
-        // Nous n'avons plus besoin d'ignoresSafeArea ici car c'est géré dans widgetBackground
+        .widgetBackground(backgroundColor: backgroundColor)
     }
     
     // Version simplifiée pour petit widget
@@ -182,19 +195,20 @@ struct SleepCountdownWidgetEntryView : View {
             HStack {
                 Image(systemName: iconName)
                     .foregroundColor(.white)
-                    .font(.system(size: 16))
+                    .font(.system(size: 14))
                 
                 Text(titleText)
-                    .font(.caption2)
+                    .font(.system(size: 14, weight: .medium))
                     .lineLimit(1)
                     .foregroundColor(.white)
+                    .minimumScaleFactor(0.7)
             }
             .padding(.top, 2)
             
             // Utilisation de GeometryReader pour adapter la taille du texte
             GeometryReader { geometry in
                 Text(timeRemainingFormatted)
-                    .font(.system(size: min(geometry.size.width / 6, 28), weight: .bold))
+                    .font(.system(size: min(geometry.size.width / 6, 32), weight: .bold))
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
                     .foregroundColor(.white)
@@ -204,9 +218,10 @@ struct SleepCountdownWidgetEntryView : View {
             .frame(height: 30)
             
             Text(subtitleText)
-                .font(.caption2)
+                .font(.system(size: 14, weight: .medium))
                 .lineLimit(1)
                 .foregroundColor(.white.opacity(0.7))
+                .minimumScaleFactor(0.7)
                 .padding(.bottom, 2)
         }
         .padding(8)
@@ -214,63 +229,45 @@ struct SleepCountdownWidgetEntryView : View {
     
     // Version complète pour widget medium
     var mediumWidget: some View {
-        VStack(spacing: 8) {
-            HStack {
-                Image(systemName: iconName)
-                    .foregroundColor(.white)
-                    .font(.system(size: 22))
+        GeometryReader { geo in
+            VStack(spacing: 6) {
+                HStack {
+                    Image(systemName: iconName)
+                        .foregroundColor(.white)
+                        .font(.system(size: 18))
+                    
+                    Text(titleText)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white)
+                        .minimumScaleFactor(0.7)
+                }
+                .padding(.top, 4)
                 
-                Text(titleText)
-                    .font(.headline)
-                    .foregroundColor(.white)
-            }
-            .padding(.top, 4)
-            
-            // Utilisation de GeometryReader pour adapter la taille du texte
-            GeometryReader { geometry in
+                // Utilisation de GeometryReader pour adapter la taille du texte
                 Text(timeRemainingFormatted)
-                    .font(.system(size: min(geometry.size.width / 8, 42), weight: .bold))
+                    .font(.system(size: min(geo.size.width / 7, 42), weight: .bold))
                     .minimumScaleFactor(0.6)
                     .lineLimit(1)
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.3), radius: 2, x: 1, y: 1)
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
+                
+                Text(subtitleText)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.white.opacity(0.7))
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
             }
-            .frame(height: 50)
-            
-            Text(subtitleText)
-                .font(.caption)
-                .foregroundColor(.white.opacity(0.7))
+            .padding(10)
+            .frame(width: geo.size.width, height: geo.size.height)
         }
-        .padding(12)
     }
     
-    // Fonction pour les éléments décoratifs
+    // Fonction pour les éléments décoratifs - SUPPRIMÉE
     func decorations(geometry: GeometryProxy) -> some View {
-        Group {
-            if isBeforeBedtime {
-                // Aucune décoration pour le thème de sommeil
-                EmptyView()
-            } else if !isBeforeBedtime && !timeIsRunningOut() {
-                // Soleil pour le thème de réveil
-                Image(systemName: "sun.max.fill")
-                    .foregroundColor(.yellow.opacity(0.7))
-                    .font(.system(size: 32))
-                    .position(x: geometry.size.width - 40, y: 25)
-            } else if timeIsRunningOut() {
-                // Icône d'alerte pour manque de sommeil
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.yellow)
-                    .font(.system(size: 32))
-                    .position(x: geometry.size.width - 40, y: 25)
-                    .opacity(alertIconOpacity)
-                    .onAppear {
-                        withAnimation(Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
-                            alertIconOpacity = 0.6
-                        }
-                    }
-            }
-        }
+        // Remplacer par EmptyView pour supprimer le point d'exclamation en arrière-plan
+        return EmptyView()
     }
     // 🖌️ UI DU WIDGET - FIN
     
@@ -307,7 +304,7 @@ struct SleepCountdownWidgetEntryView : View {
     
     var subtitleText: String {
         if timeIsRunningOut() && !isBeforeBedtime {
-            return "Only \(hoursSleepRemaining()) hours of sleep!"
+            return ""
         } else {
             return targetTimeFormatted
         }
@@ -342,7 +339,7 @@ struct SleepCountdownWidgetEntryView : View {
         return 1.0 - (Double(totalSeconds) / Double(maxSeconds))
     }
     
-    // Vérifie si le temps de sommeil restant est insuffisant (moins de 7 heures)
+    // Vérifie si l'heure du coucher est dépassée de 30 minutes
     func timeIsRunningOut() -> Bool {
         if isBeforeBedtime {
             return false // Pas d'alerte avant l'heure du coucher
@@ -350,22 +347,29 @@ struct SleepCountdownWidgetEntryView : View {
         
         let calendar = Calendar.current
         
-        // Heure du réveil
-        let wakeComponents = calendar.dateComponents([.hour, .minute], from: wakeupTime)
-        let currentComponents = calendar.dateComponents([.hour, .minute], from: entry.date)
+        // Obtenir l'heure de coucher pour aujourd'hui
+        var bedtimeComponents = calendar.dateComponents([.year, .month, .day], from: entry.date)
+        let bedtimeTimeComponents = calendar.dateComponents([.hour, .minute], from: bedtime)
+        bedtimeComponents.hour = bedtimeTimeComponents.hour
+        bedtimeComponents.minute = bedtimeTimeComponents.minute
+        let bedtimeToday = calendar.date(from: bedtimeComponents)!
         
-        // Heure actuelle convertie en minutes depuis minuit
-        let currentMinutes = currentComponents.hour! * 60 + currentComponents.minute!
-        // Heure du réveil convertie en minutes depuis minuit
-        let wakeMinutes = wakeComponents.hour! * 60 + wakeComponents.minute!
+        // Ajouter 30 minutes à l'heure du coucher
+        let bedtimePlusThirtyMin = calendar.date(byAdding: .minute, value: 30, to: bedtimeToday)!
         
-        // Si l'heure du réveil est plus tôt que l'heure actuelle, elle est le lendemain
-        let minutesToWakeup = wakeMinutes < currentMinutes ? 
-            (wakeMinutes + 24 * 60) - currentMinutes : 
-            wakeMinutes - currentMinutes
+        // Vérifier si l'heure actuelle est après l'heure du coucher + 30 min
+        // mais avant l'heure du réveil
+        let isAfterBedtimePlusThirty = entry.date > bedtimePlusThirtyMin
         
-        // Alerte si moins de 7 heures de sommeil restantes
-        return minutesToWakeup < 7 * 60
+        // Vérifier si le coucher était hier (si on est dans une nouvelle journée)
+        let isNewDay = bedtimeToday > entry.date
+        
+        // Si c'est une nouvelle journée, vérifier si on est dans les 30 minutes après minuit
+        let isWithinThirtyMinAfterMidnight = isNewDay && (calendar.dateComponents([.hour, .minute], from: entry.date).hour! * 60 + calendar.dateComponents([.hour, .minute], from: entry.date).minute! < 30)
+        
+        // L'alerte s'affiche seulement si on est après l'heure du coucher + 30 min
+        // ou si c'est une nouvelle journée et on est dans les 30 minutes après minuit
+        return isAfterBedtimePlusThirty || isWithinThirtyMinAfterMidnight
     }
     
     // Calcule le nombre d'heures de sommeil restantes
@@ -386,7 +390,12 @@ struct SleepCountdownWidgetEntryView : View {
         let hours = minutesToWakeup / 60
         let minutes = minutesToWakeup % 60
         
-        return String(format: "%d:%02d", hours, minutes)
+        // Format pour le texte d'alerte - simplifié
+        if hours > 0 {
+            return String(format: "%dh%dm", hours, minutes)
+        } else {
+            return String(format: "%dm", minutes)
+        }
     }
 }
 
@@ -422,8 +431,8 @@ struct SleepCountdownWidget: Widget {
                     .widgetBackground(backgroundColor: entryView.backgroundColor)
             }
         }
-        .configurationDisplayName("Sleep Countdown")
-        .description("Shows time until bedtime or wake-up.")
+        .configurationDisplayName("Compte à rebours sommeil")
+        .description("Affiche le temps jusqu'au coucher ou réveil.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

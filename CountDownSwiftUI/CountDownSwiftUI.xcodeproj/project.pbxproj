@@ -10,6 +10,7 @@
 		98A8E18E2D91E8A5003E3EEF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A8E18D2D91E8A5003E3EEF /* WidgetKit.framework */; };
 		98A8E1902D91E8A5003E3EEF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A8E18F2D91E8A5003E3EEF /* SwiftUI.framework */; };
 		98A8E1A12D91E8A8003E3EEF /* SleepCountdownWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 98A8E18B2D91E8A5003E3EEF /* SleepCountdownWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		98CD0B232DD2379500A317AE /* DesignSystemKit in Frameworks */ = {isa = PBXBuildFile; productRef = 98CD0B222DD2379500A317AE /* DesignSystemKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		98A8E18D2D91E8A5003E3EEF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		98A8E18F2D91E8A5003E3EEF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		98A8E1A82D91E950003E3EEF /* SleepCountdownWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SleepCountdownWidgetExtension.entitlements; sourceTree = "<group>"; };
+		98CD0AEA2DD234D500A317AE /* DesignSystemKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DesignSystemKit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -101,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98CD0B232DD2379500A317AE /* DesignSystemKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +136,7 @@
 		989313A72D7F3F3900BC6A28 = {
 			isa = PBXGroup;
 			children = (
+				98CD0AEA2DD234D500A317AE /* DesignSystemKit */,
 				98A8E1A82D91E950003E3EEF /* SleepCountdownWidgetExtension.entitlements */,
 				989313B22D7F3F3900BC6A28 /* CountDownSwiftUI */,
 				989313C82D7F3F3B00BC6A28 /* CountDownSwiftUITests */,
@@ -185,6 +189,7 @@
 			);
 			name = CountDownSwiftUI;
 			packageProductDependencies = (
+				98CD0B222DD2379500A317AE /* DesignSystemKit */,
 			);
 			productName = CountDownSwiftUI;
 			productReference = 989313B02D7F3F3900BC6A28 /* CountDownSwiftUI.app */;
@@ -293,6 +298,9 @@
 			);
 			mainGroup = 989313A72D7F3F3900BC6A28;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				98CD0B212DD2379500A317AE /* XCLocalSwiftPackageReference "DesignSystemKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 989313B12D7F3F3900BC6A28 /* Products */;
 			projectDirPath = "";
@@ -743,6 +751,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		98CD0B212DD2379500A317AE /* XCLocalSwiftPackageReference "DesignSystemKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = DesignSystemKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		98CD0B222DD2379500A317AE /* DesignSystemKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystemKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 989313A82D7F3F3900BC6A28 /* Project object */;
 }
